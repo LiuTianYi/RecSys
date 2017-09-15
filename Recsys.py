@@ -217,7 +217,8 @@ class Recsys:
                          Format: (iid, 1), 1 for clicked, 0 for not clicked
         :return: None
         """
-        evaluation = self.get_evaluation(feedback)
+        n = 5
+        evaluation = self.get_evaluation(feedback, n)
         print(evaluation)
 
         for i in range(len(feedback)):
@@ -233,20 +234,25 @@ class Recsys:
         self.Y_train = self.Y_train.append(df)
         self.train_sort_model()
 
-    def get_evaluation(self, feedback):
+    def get_evaluation(self, feedback, n):
         """
-        Get the evaluation of feedback. Currently using precision.
+        Get the evaluation of feedback. Currently using average precision.
         :param feedback: a list of tuples denoting whether items are clicked
                          Format: (iid, 1), 1 for clicked, 0 for not clicked
+               n: int, position parameter
         :return: dict
         """
         evaluation = dict()
 
         count = 0
-        for iid, clicked in feedback:
-            if clicked == 1:
+        precision = 0.0
+        for i in range(len(feedback)):
+            if feedback[i][1] == 1:
                 count += 1
-        precision = count * 1.0 / len(feedback)
-        evaluation['precision'] = precision
+                if i < n:
+                    precision += count * 1.0 / (i + 1)
+        if count != 0:
+            precision /= count
+        evaluation['average precision'] = precision
 
         return evaluation

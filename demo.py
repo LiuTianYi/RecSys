@@ -6,7 +6,7 @@ import numpy as np
 
 CONTENT_DIM = 100
 TITLE_DIM = 50
-USERS = 100
+USERS = 1000
 ITEMS = 100
 N = 10
 ITERATIONS = 10
